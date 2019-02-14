@@ -9,10 +9,38 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    let cer : CertificateTest = CertificateTest()
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        one()
+        two()
+        three()
+    }
+    
+    func one(){
+        cer.getSubjectList { (date) in
+            for item in date{
+                print(item.subject!,"\t",item.value!)
+            }
+        }
+    }
+    
+    
+    func two(){
+        cer.geteDtailSubjectList { (date) in
+            for item in date{
+                print(item.dbname!,"\t",item.text!)
+            }
+        }
+    }
+    
+    func three(){
+        cer.geteDtailSubjectDateList { (date) in
+            for item in date{
+                print(item.subject!,"\t",item.value!)
+            }
+        }
     }
 
 

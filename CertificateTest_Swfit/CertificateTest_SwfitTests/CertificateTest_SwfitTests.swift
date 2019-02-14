@@ -10,7 +10,9 @@ import XCTest
 @testable import CertificateTest_Swfit
 
 class CertificateTest_SwfitTests: XCTestCase {
-
+    
+    
+    var certificate :CertificateTest = CertificateTest()
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -18,21 +20,20 @@ class CertificateTest_SwfitTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let  certificate :CertificateTest = CertificateTest()
-        do{
-            try certificate.getSubjectList{ subject in
-                for item in subject{
-                    print(item.subject!)
-                    print(item.value!)
-                }
+    
+    func testOne(){
+        self.certificate.getSubjectList{ subject in
+            for item in subject{
+                print(item.subject!,item.value!)
             }
-            
-        }catch{
-            print("Error")
+        }
+        
+    }
+    func testTwo() {
+        self.certificate.geteDtailSubjectList { (dtailSubject) in
+            for item in dtailSubject{
+                print(item.dbname!,item.text!)
+            }
         }
     }
 
@@ -44,3 +45,4 @@ class CertificateTest_SwfitTests: XCTestCase {
     }
 
 }
+
