@@ -13,7 +13,7 @@ import Alamofire
 enum TestURL : String{
     case s​ubjectList = "http://www.comcbt.com/cbt/s_view.php"
     case details​ubjectList = "http://www.comcbt.com/cbt/s_view1.php"
-    case three = "http://www.comcbt.com/cbt/s_view2.php"
+    case s​ubjectpick = "http://www.comcbt.com/cbt/s_view2.php"
 }
 
 struct subject {
@@ -134,7 +134,7 @@ class CertificateTest {
     func geteDtailSubjectDateList(completion: @escaping([subject])->()) {
         let parameters: Parameters = ["hack_number": 0,"imsidbname":"기사","dbname":"kt"]
         var list :[subject] = []
-        Alamofire.request(TestURL.three.rawValue, method: .post, parameters: parameters, encoding: URLEncoding.httpBody)
+        Alamofire.request(TestURL.s​ubjectpick.rawValue, method: .post, parameters: parameters, encoding: URLEncoding.httpBody)
             .validate { request, response, data in
                 // Custom evaluation closure now includes data (allows you to parse data to dig out error messages if necessary)
                 
@@ -145,6 +145,17 @@ class CertificateTest {
                 do{
                     let doc: Document = try SwiftSoup.parse(String(data: response.data!, encoding: String.Encoding.utf8)!)
                     let select: Elements = try doc.select("select[name=tablename] option")
+                    
+                    
+                    let pattern = "[0-9]과목 : ([가-힣]*)"
+                    let title: String = try doc.select("table").get(0).text()
+                    print("------------------------------")
+                    print(title)
+                    print("------------------------------")
+                    print(self.matches(for: pattern , in: title))
+                    
+                    
+                    
                     for option: Element in select.array() {
                         list.append(subject(subject: try option.text(), valse: try option.val()))
                     }
@@ -154,6 +165,21 @@ class CertificateTest {
                 }
         }
                     
+    }
+    
+    func matches(for regex: String, in text: String) -> [String] {
+        
+        do {
+            let regex = try NSRegularExpression(pattern: regex)
+            let results = regex.matches(in: text,
+                                        range: NSRange(text.startIndex..., in: text))
+            return results.map {
+                String(text[Range($0.range(at: 1), in: text)!])
+            }
+        } catch let error {
+            print("invalid regex: \(error.localizedDescription)")
+            return []
+        }
     }
 }
  
